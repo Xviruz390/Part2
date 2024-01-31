@@ -1,0 +1,31 @@
+if (nameExists || phoneExists) {
+      const existingPerson = persons.find((person) => person.name === newName);
+
+      if (
+        window.confirm(
+          `${existingPerson.name} already exists in the phonebook, do you want to replace the number?`
+        )
+      ) {
+        personsService
+          .update(existingPerson.id, newEntry)
+          .then((updatedPerson) => {
+            setPersons((prevPersons) =>
+              prevPersons.map((person) =>
+                person.id !== updatedPerson.id ? person : updatedPerson
+              )
+            );
+            setMessage(`${newName} updated`);
+            setMessageType('message');
+            setTimeout(() => {
+              setMessage(null);
+              setMessageType(null);
+            }, 5000);
+            console.log('Number replaced successfully.');
+          })
+          .catch((error) => {
+            console.error('Error replacing number', error);
+            setMessage(`${newName} information was already removed from server`);
+            setMessageType('error');
+          });
+      }
+    } else
